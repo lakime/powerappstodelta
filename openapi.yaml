@@ -1,0 +1,81 @@
+swagger: '2.0'
+info:
+  description: >-
+    This is test connector to connect to the Databricks API Directly and perform SQL Queries
+  version: 1.0.0
+  title: Sample API
+host: adb-xxxxxxx.xx.azuredatabricks.net
+basePath: /api/2.0
+schemes:
+  - https
+paths:
+  /sql/statements:
+    post:
+      summary: Example operation
+      parameters:
+        - in: header
+          name: Content-Type
+          required: true
+          type: string
+          default: application/json
+          description: Content-Type header
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              statement:
+                type: string
+                description: The SQL query to execute
+              warehouse_id:
+                type: string
+                description: The SQL warehouse to use for executing the query
+                example: 1234-5678-warehouse-id
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              result:
+                type: object
+                description: The query result
+                properties:
+                  rows:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+                  schema:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        type:
+                          type: string
+        '400':
+          description: Bad request or invalid SQL query
+          schema:
+            type: object
+            properties:
+              error_code:
+                type: string
+                description: Error code returned by the API
+              message:
+                type: string
+                description: Detailed error message
+      operationId: ExecuteSQL
+      description: >-
+        This is test connector to connect to the Databricks API Directly and
+        fetch the data from Delta Lake, next step would be making insert
+securityDefinitions:
+  PAT:
+    type: apiKey
+    in: header
+    name: Authorization
+security:
+  - PAT: []
